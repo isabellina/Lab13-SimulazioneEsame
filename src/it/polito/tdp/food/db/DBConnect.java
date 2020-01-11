@@ -8,7 +8,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 public class DBConnect {
 
-	private static final String jdbcURL = "jdbc:mysql://localhost/food_pyramid";
+	private static final String jdbcURL = "jdbc:mysql://localhost/food_pyramid_mod";
 	private static HikariDataSource ds;
 	
 	public static Connection getConnection() {
