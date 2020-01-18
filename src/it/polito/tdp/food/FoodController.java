@@ -7,7 +7,10 @@ package it.polito.tdp.food;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.food.db.Condiment;
 import it.polito.tdp.food.model.Model;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -32,7 +35,7 @@ public class FoodController {
     private Button btnCreaGrafo; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxIngrediente"
-    private ComboBox<?> boxIngrediente; // Value injected by FXMLLoader
+    private ComboBox<Condiment> boxIngrediente; // Value injected by FXMLLoader
 
     @FXML // fx:id="btnDietaEquilibrata"
     private Button btnDietaEquilibrata; // Value injected by FXMLLoader
@@ -42,7 +45,8 @@ public class FoodController {
 
     @FXML
     void doCalcolaDieta(ActionEvent event) {
-       
+       Condiment s = boxIngrediente.getValue();
+       txtResult.appendText("Ecco il cammino di peso massimo : " + this.model.maxNumeroCal(s));
     }
 
     @FXML
@@ -52,6 +56,10 @@ public class FoodController {
          	txtResult.clear();
          	this.model.creaGrafo(calorie);
          	txtResult.appendText("ecco le informazioni che volevi : " + this.model.getInfo());
+         	ObservableList<Condiment> listaIngredienti = FXCollections.observableList(this.model.getIngredienti(calorie));
+         	boxIngrediente.setItems(listaIngredienti);
+         	boxIngrediente.setValue(listaIngredienti.get(0));
+         	
          }
          catch(NumberFormatException n) {
          	txtResult.appendText("Inserisci un numero reale!");

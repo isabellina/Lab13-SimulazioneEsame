@@ -14,7 +14,10 @@ public class Model {
 	
 	private FoodDao foodDao ;
 	private Graph<Condiment, MyEdge> grafo;
-	
+	private List<Condiment> ottima;
+	private List<Condiment> parziale;
+	private double max= -1.00;
+	private double pesoParziale;
 	
 	public Model() {
 		this.foodDao = new FoodDao();
@@ -61,5 +64,42 @@ public class Model {
 		}
 		return ret;
 	}
+	
+	public List<Condiment> maxNumeroCal (Condiment s){
+		ottima = new LinkedList<Condiment>();
+		parziale = new LinkedList<Condiment>();
+		recursive(parziale, s);
+		return this.ottima;
+	}
+	
+	private void recursive(List<Condiment> parziale, Condiment s) {
+		
+	
+		if(this.pesoParziale>max && parziale.contains(s)) {
+			max = pesoParziale;
+			this.ottima = new LinkedList<Condiment>(parziale);
+		}
+		else {
+			for(Condiment c : this.grafo.vertexSet()) {
+				for(Condiment a: this.grafo.vertexSet()) {
+					MyEdge e = this.grafo.getEdge(c, a);
+					if(e==null) {
+						parziale.add(c);
+						parziale.add(a);
+						pesoParziale+=c.getCondiment_calories() + a.getCondiment_calories();
+						this.recursive(parziale,s);
+						parziale.remove(c);
+						parziale.remove(a);
+					}
+				}
+		       }
+			}
+		}
+			
+	
 
+    public double getPeso() {
+    	return max;
+    }
+    
 }
